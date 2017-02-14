@@ -33,7 +33,7 @@ An example of a distortion corrected image is in Cell 4.
 ## Pipeline (single images)
 1. Provide an example of a distortion-corrected image.
 
-Example is shown in Cell 5.
+   Example is shown in Cell 5.
 
 2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image. Provide an example of a binary image result.
 
