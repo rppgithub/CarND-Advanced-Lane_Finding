@@ -65,9 +65,46 @@ Example is shown in Cell 5.
  
 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
+   Much of the code is borrowed from the Udacity lecture notes. 
+   
+   The code is found in the function Lane_Finder in Cell 19.
+   
+   I compute the histogram of the bottom half of the image and identify the peaks in the left and right half of 
+   the histogram. I used sliding windows and stepped through the windows identifying lane pixels and adding them to
+   the left and right lane indicators. Then the left and right line pixel positions are extracted and lines are fit 
+   using a second order polynomial.
+   
+   Once the lane is detected, I search within the region to obtain the next lane lines that are good and then fit the 
+   lines. If the vehicle is offset is > .1, I recalculate the lines.
+
  
  
 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the  vehicle with respect to center.
+
+   I calculate the radius of curvature in the function get_curvature which is in Cell 17. This code was borrowed from the Udacity lecture notes.
+   ```
+   y_eval = np.max(lefty)
+   left_curverad = ((1 + (2*left_fit[0]*y_eval + left_fit[1])**2)**1.5) / np.absolute(2*left_fit[0])
+   right_curverad = ((1 + (2*right_fit[0]*y_eval + right_fit[1])**2)**1.5) / np.absolute(2*right_fit[0])
+   ```
+   This gave me the radius in pixels which is then converted to meters in the following code:
+   ```
+   ym_per_pix = 30/720 # meters per pixel in y dimension
+   xm_per_pix = 3.7/700 # meters per pixel in x dimension
+
+   # Fit new polynomials to x,y in world space
+   left_fit_cr = np.polyfit(lefty*ym_per_pix, leftx*xm_per_pix, 2)
+   right_fit_cr = np.polyfit(righty*ym_per_pix, rightx*xm_per_pix, 2)
+   # Calculate the new radii of curvature
+   left_curverad = ((1 + (2*left_fit_cr[0]*y_eval*ym_per_pix + left_fit_cr[1])**2)**1.5) /np.absolute(2*left_fit_cr[0])
+   right_curverad = ((1 + (2*right_fit_cr[0]*y_eval*ym_per_pix + right_fit_cr
+        
+   ```  
+   I calculate the position of the vehicle using the code in the function get_offset in Cell 18.
+   
+   I used the bottom left, right and bottom y co-ordinates and then convert it to meters to get the vehicle offset 
+   from the center
+   
  
  
 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
@@ -77,10 +114,13 @@ Example is shown in Cell 5.
  ## Pipeline (video)
 1. Provide a link to your final video output. Your pipeline should perform reasonably well on the entire project video (wobbly      lines are ok but no catastrophic failures that would cause the car to drive off the road!).
 
-  The final video ouput is stored in <p>Here's a <a href="./result.mp4">Link to my video result</a></p>
+   <p>Here's a <a href="./result.mp4">Link to my video result</a></p>
 
 
 ## Discussion
 1. Briefly discuss any problems / issues you faced in your implementation of this project. Where will your pipeline likely fail?    What could you do to make it more robust?
 
-Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.
+  The most difficult part of this exercise was tuning the threshold and obtaining the source and destination points 
+  for the Perspective transform. I already see that this did not perform well on the challenge video where there is 
+  not adequate lighting. Also, if there are others cars in the lane, this approach would not work very well. I think 
+  identifying and classifying objects such as other vehicles would make this more robust.
