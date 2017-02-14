@@ -12,6 +12,11 @@ The goals / steps of this project are the following:
 * Output visual display of the lane boundaries and numerical estimation of lane curvature and vehicle position.
 
 
+## How to Run this code.
+ * Run python Advanced_Lane_Finding.py. This creates output in same directory called result.mp4
+ * Also, I have the ipython notebook Advanced_Lane_Finding_Submission.ipynb
+ * Images are stored in output_images
+
 ## Camera Calibration
 
 1. Briefly state how you computed the camera matrix and distortion coefficients. Provide an example of a distortion corrected calibration image.
